@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="et" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Broneeringud')}"></head>
+<body>
+<header th:replace="~{fragments/layout :: nav('bookings')}"></header>
+<main>
+    <div class="page-head">
+        <h1 th:text="${isAdmin} ? 'Kõik broneeringud' : 'Minu broneeringud'">Broneeringud</h1>
+        <a class="btn primary" th:if="${isCustomer}" th:href="@{/bookings/new}">+ Uus broneering</a>
+    </div>
+    <div th:replace="~{fragments/layout :: messages}"></div>
+
+    <table>
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th th:if="${isAdmin}">Klient</th>
+            <th>Auto</th><th>Algus</th><th>Lõpp</th><th>Päevi</th><th>Koguhind</th><th>Staatus</th><th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="b : ${bookings}" th:classappend="${!b.active} ? 'muted'">
+            <td th:text="${b.id}">1</td>
+            <td th:if="${isAdmin}" th:text="${b.user.name}">Martin Tamm</td>
+            <td th:text="${b.car.displayName}">Toyota Corolla (2022)</td>
+            <td th:text="${#temporals.format(b.startDate, 'dd.MM.yyyy')}">01.01.2026</td>
+            <td th:text="${#temporals.format(b.endDate, 'dd.MM.yyyy')}">06.01.2026</td>
+            <td th:text="${b.days}">5</td>
+            <td th:text="${#numbers.formatDecimal(b.totalPrice, 1, 2)} + ' €'">175.00 €</td>
+            <td><span class="badge" th:classappend="${b.active} ? 'ok' : 'off'" th:text="${b.status}">Aktiivne</span></td>
+            <td class="actions">
+                <form th:if="${b.active}" th:action="@{/bookings/{id}/cancel(id=${b.id})}" method="post"
+                      onsubmit="return confirm('Kas oled kindel, et soovid broneeringu tühistada?');">
+                    <button class="btn danger" type="submit">Tühista</button>
+                </form>
+            </td>
+        </tr>
+        <tr th:if="${#lists.isEmpty(bookings)}">
+            <td th:colspan="${isAdmin} ? 9 : 8" class="empty">Broneeringuid pole veel tehtud.</td>
+        </tr>
+        </tbody>
+    </table>
+</main>
+</body>
+</html>

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="et" xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="head(title)">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="${title} + ' • Autode rendisüsteem'">Autode rendisüsteem</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<header th:fragment="nav(active)">
+    <div class="topbar">
+        <a class="brand" th:href="@{/}">🚗 Autode rendisüsteem</a>
+        <nav>
+            <th:block th:if="${loggedInName != null}">
+                <a th:href="@{/bookings}" th:classappend="${active == 'bookings'} ? 'active'"
+                   th:text="${isAdmin} ? 'Broneeringud' : 'Minu broneeringud'">Broneeringud</a>
+                <a th:if="${isAdmin}" th:href="@{/cars}" th:classappend="${active == 'cars'} ? 'active'">Autod</a>
+                <a th:if="${isAdmin}" th:href="@{/customers}" th:classappend="${active == 'customers'} ? 'active'">Kliendid</a>
+                <span class="user">
+                    <span th:text="${loggedInName}">Nimi</span>
+                    <span class="role" th:text="${isAdmin} ? 'admin' : 'klient'">klient</span>
+                </span>
+                <form class="logout" th:action="@{/logout}" method="post">
+                    <button type="submit" class="btn-link">Logi välja</button>
+                </form>
+            </th:block>
+            <th:block th:if="${loggedInName == null}">
+                <a th:href="@{/login}" th:classappend="${active == 'login'} ? 'active'">Logi sisse</a>
+                <a th:href="@{/register}" th:classappend="${active == 'register'} ? 'active'">Registreeru</a>
+            </th:block>
+        </nav>
+    </div>
+</header>
+<div th:fragment="messages">
+    <div class="alert success" th:if="${success}" th:text="${success}"></div>
+    <div class="alert error" th:if="${error}" th:text="${error}"></div>
+</div>
+</body>
+</html>

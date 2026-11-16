@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="et" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Logi sisse')}"></head>
+<body>
+<header th:replace="~{fragments/layout :: nav('login')}"></header>
+<main>
+    <h1>Logi sisse</h1>
+
+    <div class="alert error" th:if="${param.error}">Vale e-post või parool.</div>
+    <div class="alert success" th:if="${param.logout}">Oled välja logitud.</div>
+    <div class="alert success" th:if="${param.registered}">Konto loodud! Nüüd saad sisse logida.</div>
+
+    <form class="card" th:action="@{/login}" method="post">
+        <label>E-post
+            <input type="email" name="username" autofocus required placeholder="martin@gmail.com">
+        </label>
+        <label>Parool
+            <input type="password" name="password" required>
+        </label>
+        <div class="form-actions">
+            <button class="btn primary" type="submit">Logi sisse</button>
+            <a class="btn" th:href="@{/register}">Loo konto</a>
+        </div>
+    </form>
+</main>
+</body>
+</html>

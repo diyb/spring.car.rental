@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="et" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Uus broneering')}"></head>
+<body>
+<header th:replace="~{fragments/layout :: nav('bookings')}"></header>
+<main>
+    <h1>Uus broneering</h1>
+
+    <form class="card" th:action="@{/bookings/save}" th:object="${bookingForm}" method="post">
+        <div class="alert error" th:if="${#fields.hasGlobalErrors()}">
+            <p th:each="err : ${#fields.globalErrors()}" th:text="${err}"></p>
+        </div>
+
+        <p class="hint">Klient: <strong th:text="${loggedInName}">Martin Tamm</strong></p>
+
+        <label>Auto
+            <select th:field="*{carId}">
+                <option value="">-- Vali auto --</option>
+                <option th:each="car : ${cars}" th:value="${car.id}"
+                        th:text="${car.displayName + ' – ' + #numbers.formatDecimal(car.dailyPrice, 1, 2) + ' €/päev'}"></option>
+            </select>
+            <span class="field-error" th:if="${#fields.hasErrors('carId')}" th:errors="*{carId}"></span>
+        </label>
+
+        <div class="row">
+            <label>Alguskuupäev
+                <input type="date" th:field="*{startDate}">
+                <span class="field-error" th:if="${#fields.hasErrors('startDate')}" th:errors="*{startDate}"></span>
+            </label>
+            <label>Lõppkuupäev
+                <input type="date" th:field="*{endDate}">
+                <span class="field-error" th:if="${#fields.hasErrors('endDate')}" th:errors="*{endDate}"></span>
+            </label>
+        </div>
+
+        <p class="hint">Hind = päevade arv × päevahind. Päevade arv on lõppkuupäev miinus alguskuupäev. Koguhind arvutatakse automaatselt salvestamisel.</p>
+
+        <div class="form-actions">
+            <button class="btn primary" type="submit">Loo broneering</button>
+            <a class="btn" th:href="@{/bookings}">Tühista</a>
+        </div>
+    </form>
+</main>
+</body>
+</html>

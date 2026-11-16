@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="et" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Kliendid')}"></head>
+<body>
+<header th:replace="~{fragments/layout :: nav('customers')}"></header>
+<main>
+    <div class="page-head">
+        <h1>Kliendid</h1>
+    </div>
+    <div th:replace="~{fragments/layout :: messages}"></div>
+
+    <table>
+        <thead>
+        <tr>
+            <th>ID</th><th>Nimi</th><th>E-post</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="c : ${customers}">
+            <td th:text="${c.id}">1</td>
+            <td th:text="${c.name}">Martin Tamm</td>
+            <td th:text="${c.email}">martin@gmail.com</td>
+        </tr>
+        <tr th:if="${#lists.isEmpty(customers)}"><td colspan="3" class="empty">Kliente pole veel registreeritud.</td></tr>
+        </tbody>
+    </table>
+</main>
+</body>
+</html>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="et" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Registreeru')}"></head>
+<body>
+<header th:replace="~{fragments/layout :: nav('register')}"></header>
+<main>
+    <h1>Loo kliendikonto</h1>
+
+    <form class="card" th:action="@{/register}" th:object="${registrationForm}" method="post">
+        <label>Nimi
+            <input type="text" th:field="*{name}" placeholder="Martin Tamm">
+            <span class="field-error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
+        </label>
+
+        <label>E-post (kasutatakse sisselogimiseks)
+            <input type="email" th:field="*{email}" placeholder="martin@gmail.com">
+            <span class="field-error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>
+        </label>
+
+        <label>Parool (vähemalt 6 tähemärki)
+            <input type="password" th:field="*{password}">
+            <span class="field-error" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></span>
+        </label>
+
+        <label>Korda parooli
+            <input type="password" th:field="*{confirmPassword}">
+            <span class="field-error" th:if="${#fields.hasErrors('confirmPassword')}" th:errors="*{confirmPassword}"></span>
+        </label>
+
+        <div class="form-actions">
+            <button class="btn primary" type="submit">Registreeru</button>
+            <a class="btn" th:href="@{/login}">Mul on konto</a>
+        </div>
+    </form>
+</main>
+</body>
+</html>

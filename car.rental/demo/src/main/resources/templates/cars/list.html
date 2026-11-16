@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="et" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Autod')}"></head>
+<body>
+<header th:replace="~{fragments/layout :: nav('cars')}"></header>
+<main>
+    <div class="page-head">
+        <h1>Autod</h1>
+        <a class="btn primary" th:href="@{/cars/new}">+ Lisa auto</a>
+    </div>
+    <div th:replace="~{fragments/layout :: messages}"></div>
+
+    <table>
+        <thead>
+        <tr>
+            <th>ID</th><th>Mark</th><th>Mudel</th><th>Aasta</th><th>Päevahind</th><th>Staatus</th><th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="car : ${cars}">
+            <td th:text="${car.id}">1</td>
+            <td th:text="${car.brand}">Toyota</td>
+            <td th:text="${car.model}">Corolla</td>
+            <td th:text="${car.year}">2022</td>
+            <td th:text="${#numbers.formatDecimal(car.dailyPrice, 1, 2)} + ' €'">35.00 €</td>
+            <td><span class="badge" th:classappend="${car.status == 'Saadaval'} ? 'ok' : 'off'" th:text="${car.status}">Saadaval</span></td>
+            <td class="actions">
+                <a class="btn" th:href="@{/cars/{id}/edit(id=${car.id})}">Muuda</a>
+                <form th:action="@{/cars/{id}/delete(id=${car.id})}" method="post"
+                      onsubmit="return confirm('Kas oled kindel, et soovid auto kustutada?');">
+                    <button class="btn danger" type="submit">Kustuta</button>
+                </form>
+            </td>
+        </tr>
+        <tr th:if="${#lists.isEmpty(cars)}"><td colspan="7" class="empty">Autosid pole veel lisatud.</td></tr>
+        </tbody>
+    </table>
+</main>
+</body>
+</html>
